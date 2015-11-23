@@ -78,6 +78,7 @@ LD_FLAGS="%{rpmldflags}" \
 %{__make} \
 	CC="%{__cc}" \
 	LD="%{__cc}" \
+	PREFIX=%{_prefix} \
 	LIBDIR=%{_libdir}
 
 %install
