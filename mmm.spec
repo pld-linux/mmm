@@ -12,6 +12,7 @@ Source0:	https://github.com/hodefoting/mmm/archive/%{gitref}/%{name}-%{snap}.tar
 Patch0:		%{name}-mm.patch
 URL:		https://github.com/hodefoting/mmm/
 BuildRequires:	SDL-devel >= 1.2
+BuildRequires:	pkgconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
