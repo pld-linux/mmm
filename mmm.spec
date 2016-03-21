@@ -2,13 +2,13 @@ Summary:	Memory Mapped Machine
 Summary(pl.UTF-8):	Memory Mapped Machine - sprzęt odwzorowany w pamięci
 Name:		mmm
 Version:	0
-%define	gitref	e41eee502568d479c6483ecae7f554312ab4ad27
-%define	snap	20150416
+%define	gitref	d1b866de230b8303df3fcd9cb2a121edc87c81dc
+%define	snap	20160102
 Release:	0.%{snap}.1
 License:	MIT
 Group:		Libraries
 Source0:	https://github.com/hodefoting/mmm/archive/%{gitref}/%{name}-%{snap}.tar.gz
-# Source0-md5:	6df3516e879dfb7f80b6dc3a1160b510
+# Source0-md5:	f2779fc0387ffdae206941d910fcdbcf
 Patch0:		%{name}-mm.patch
 URL:		https://github.com/hodefoting/mmm/
 BuildRequires:	SDL-devel >= 1.2
