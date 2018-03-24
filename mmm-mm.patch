@@ -1,6 +1,6 @@
---- mmm-e41eee502568d479c6483ecae7f554312ab4ad27/.mm/bin.orig	2015-04-15 17:22:26.000000000 +0200
-+++ mmm-e41eee502568d479c6483ecae7f554312ab4ad27/.mm/bin	2015-11-23 19:55:08.826073329 +0100
-@@ -12,11 +12,11 @@
+--- mmm-0.1.0/.mm/bin.orig	2016-12-19 19:19:18.000000000 +0100
++++ mmm-0.1.0/.mm/bin	2018-03-24 15:06:16.813108957 +0100
+@@ -12,11 +12,11 @@ BIN_CFLAGS += $(shell test "$(BIN_PKGMOD
  BIN_LD_FLAGS += $(shell test "$(BIN_PKGMODULES)" 2>/dev/null && pkg-config $(BIN_PKGMODULES) --libs)
  
  $(BINARY): $(BIN_CFILES) $(LIBNAME_A)
@@ -14,9 +14,9 @@
  		$(BIN_CFILES) $(LIBNAME_A) -lefence -o $@
  
  all: $(BIN_TARGETS)
---- mmm-e41eee502568d479c6483ecae7f554312ab4ad27/.mm/lib.orig	2015-04-15 17:22:26.000000000 +0200
-+++ mmm-e41eee502568d479c6483ecae7f554312ab4ad27/.mm/lib	2015-11-23 20:11:23.212699103 +0100
-@@ -16,23 +16,23 @@
+--- mmm-0.1.0/.mm/lib.orig	2018-03-24 15:06:16.813108957 +0100
++++ mmm-0.1.0/.mm/lib	2018-03-24 15:08:07.469799580 +0100
+@@ -16,23 +16,23 @@ LIB_LD_FLAGS += $(shell test "$(LIB_PKGM
  LIBNAME_A=$(LIBNAME).a
  
  $(LIBNAME).a: $(LIB_OBJS)
@@ -30,8 +30,8 @@
 +	echo " gen" $@;  nm -a $(LIB_OBJS) | grep " T " | cut -f 3 -d ' ' | grep "^$(SYMBOL_PREFIX)" | grep -v "^_" | sort > $@
  
  $(LIBNAME).$(LIBEXT): $(LIB_OBJS) symbols
--	@echo "  LD" $@;$(LD) --retain-symbols-file=symbols -shared $(LIB_OBJS) -o $@ $(LIB_LD_FLAGS)
-+	echo "  LD" $@;$(LD) -Wl,--retain-symbols-file=symbols -shared $(LIB_OBJS) -o $@ $(LIB_LD_FLAGS)
+-	@echo "  LD" $@;$(CC) --shared $(LIB_OBJS) -o $@ $(LIB_LD_FLAGS)
++	echo "  LD" $@;$(CC) --shared $(LIB_OBJS) -o $@ $(LIB_LD_FLAGS)
  
  # this rule is generic and could also belong with bin..
  # we try to be overly generic and throw in the cflags of both lib and bin..
@@ -45,9 +45,9 @@
  
  LIBDIR ?= $(PREFIX)/lib
  #$(P64)
---- mmm-e41eee502568d479c6483ecae7f554312ab4ad27/.mm/pkgconfig.orig	2015-04-15 17:22:26.000000000 +0200
-+++ mmm-e41eee502568d479c6483ecae7f554312ab4ad27/.mm/pkgconfig	2015-11-23 20:21:30.166007161 +0100
-@@ -6,7 +6,7 @@
+--- mmm-0.1.0/.mm/pkgconfig.orig	2016-12-19 19:19:18.000000000 +0100
++++ mmm-0.1.0/.mm/pkgconfig	2018-03-24 15:06:16.813108957 +0100
+@@ -6,7 +6,7 @@ $(PROJECT_NAME).pc:
  	@echo " gen" $@
  	@echo "prefix=$(PREFIX)"     > $@
  	@echo exec_prefix=\$${prefix} >> $@
