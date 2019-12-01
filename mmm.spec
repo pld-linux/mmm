@@ -2,16 +2,18 @@ Summary:	Memory Mapped Machine
 Summary(pl.UTF-8):	Memory Mapped Machine - sprzęt odwzorowany w pamięci
 Name:		mmm
 Version:	0
-%define	gitref	0ae93f1b2fcc1dc77e3d6029fce89bc1ab115fa0
-%define	snap	20171127
+%define	gitref	58892979d9725a0eda0e3aea373cdefd0b01f6a1
+%define	snap	20191113
 Release:	0.%{snap}.1
 License:	MIT
 Group:		Libraries
 Source0:	https://github.com/hodefoting/mmm/archive/%{gitref}/%{name}-%{snap}.tar.gz
-# Source0-md5:	b2da0900399bbbd32264d134e18675b9
-Patch0:		%{name}-mm.patch
+# Source0-md5:	dc6459747c3be126c02e48a0b1f62884
+Patch0:		%{name}-missing.patch
 URL:		https://github.com/hodefoting/mmm/
 BuildRequires:	SDL-devel >= 1.2
+BuildRequires:	meson >= 0.50.0
+BuildRequires:	ninja >= 1.5
 BuildRequires:	pkgconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -74,21 +76,14 @@ Statyczna biblioteka mmm.
 %patch0 -p1
 
 %build
-CFLAGS="%{rpmcflags}" \
-LD_FLAGS="%{rpmldflags}" \
-%{__make} \
-	CC="%{__cc}" \
-	LD="%{__cc}" \
-	PREFIX=%{_prefix} \
-	LIBDIR=%{_libdir}
+%meson build
+
+%ninja_build -C build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	PREFIX=%{_prefix} \
-	LIBDIR=%{_libdir}
+%ninja_install -C build
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -98,7 +93,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/mmm
 %attr(755,root,root) %{_bindir}/mmm.kobo
 %attr(755,root,root) %{_bindir}/mmm.linux
 %attr(755,root,root) %{_bindir}/mmm.sdl
@@ -110,7 +104,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/mmm
+%{_includedir}/mmm-0.0
 %{_pkgconfigdir}/mmm.pc
 
 %files static
