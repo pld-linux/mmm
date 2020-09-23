@@ -1,20 +1,27 @@
+#
+# Conditional build:
+%bcond_with	sdl1	# SDL 1.x client
+%bcond_without	sdl2	# SDL 2.x client
+
 Summary:	Memory Mapped Machine
 Summary(pl.UTF-8):	Memory Mapped Machine - sprzęt odwzorowany w pamięci
 Name:		mmm
-Version:	0
-%define	gitref	58892979d9725a0eda0e3aea373cdefd0b01f6a1
-%define	snap	20191113
-Release:	0.%{snap}.1
+Version:	0.1.1
+Release:	1
 License:	MIT
 Group:		Libraries
-Source0:	https://github.com/hodefoting/mmm/archive/%{gitref}/%{name}-%{snap}.tar.gz
-# Source0-md5:	dc6459747c3be126c02e48a0b1f62884
-Patch0:		%{name}-missing.patch
+#Source0Download: https://github.com/hodefoting/mmm/releases
+Source0:	https://github.com/hodefoting/mmm/archive/%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	b2d38082c3293ef1a44391cff7e0a109
 URL:		https://github.com/hodefoting/mmm/
-BuildRequires:	SDL-devel >= 1.2
+%{?with_sdl1:BuildRequires:	SDL-devel >= 1.2.0}
+%{?with_sdl2:BuildRequires:	SDL2-devel >= 2.0.4}
 BuildRequires:	meson >= 0.50.0
 BuildRequires:	ninja >= 1.5
 BuildRequires:	pkgconfig
+BuildRequires:	rpmbuild(macros) >= 1.736
+%{?with_sdl1:Requires:	SDL >= 1.2.0}
+%{?with_sdl2:Requires:	SDL2 >= 2.0.4}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -72,11 +79,12 @@ Static mmm library.
 Statyczna biblioteka mmm.
 
 %prep
-%setup -q -n %{name}-%{gitref}
-%patch0 -p1
+%setup -q
 
 %build
-%meson build
+%meson build \
+	%{!?with_sdl1:-Dsdl1=disabled} \
+	%{!?with_sdl2:-Dsdl2=disabled}
 
 %ninja_build -C build
 
@@ -93,9 +101,15 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/mmm
 %attr(755,root,root) %{_bindir}/mmm.kobo
 %attr(755,root,root) %{_bindir}/mmm.linux
+%if %{with sdl1}
 %attr(755,root,root) %{_bindir}/mmm.sdl
+%endif
+%if %{with sdl2}
+%attr(755,root,root) %{_bindir}/mmm.sdl2
+%endif
 
 %files libs
 %defattr(644,root,root,755)
@@ -104,7 +118,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/mmm-0.0
+%{_includedir}/mmm-0.1
 %{_pkgconfigdir}/mmm.pc
 
 %files static
