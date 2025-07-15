@@ -82,16 +82,16 @@ Statyczna biblioteka mmm.
 %setup -q
 
 %build
-%meson build \
+%meson \
 	%{!?with_sdl1:-Dsdl1=disabled} \
 	%{!?with_sdl2:-Dsdl2=disabled}
 
-%ninja_build -C build
+%meson_build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%ninja_install -C build
+%meson_install
 
 %clean
 rm -rf $RPM_BUILD_ROOT
